@@ -1,0 +1,22 @@
+package librecat.org.catmandu.bind;
+
+import java.util.function.Function;
+import librecat.org.catmandu.Binder;
+
+/**
+ *
+ * @author hochsten
+ * @param <T>
+ */
+public class IdentityBinder<T> extends Binder<T,T> {
+
+    @Override
+    public T unit(T data) {
+        return data;
+    }
+
+    @Override
+    public T bind(T xdata, Function<T, T> fixer) {
+        return fixer.apply(xdata);
+    }
+}

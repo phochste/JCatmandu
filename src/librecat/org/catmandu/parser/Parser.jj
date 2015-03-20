@@ -1,0 +1,76 @@
+PARSER_BEGIN(Parser)
+    package librecat.org.catmandu.parser;
+
+    import librecat.org.catmandu.Fixable;
+    import librecat.org.catmandu.Util;
+    import librecat.org.catmandu.fix.StreamableFixer;
+
+    public class Parser {
+        
+        public static StreamableFixer parse(java.io.Reader reader) throws ParseException, TokenMgrError {
+            return new Parser(reader).Expression();
+        }
+    }
+PARSER_END(Parser)
+
+SKIP:  { 
+    " "  | 
+    "\t" | 
+    "\n" | 
+    "\r" |
+    "\f"
+}
+
+SPECIAL_TOKEN : /* COMMENTS */
+{
+  <SINGLE_LINE_COMMENT: "#" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+}
+
+TOKEN : /* RESERVED WORDS AND LITERALS */
+{
+  < DO: "do" >
+| < DOSET: "doset" >
+| < END: "end">
+| < ELSE: "else">
+| < IF: "if" > 
+| < UNLESS: "unless">
+| < LPAREN: "(">
+| < RPAREN: ")">
+}
+
+TOKEN : 
+{
+  < STRING : (["A"-"Z" , "a"-"z" , "_" , "0"-"9"])+ > 
+| < QUOTED_STRING: "\"" (~["\""])+ "\"" >
+}
+
+/** Root production. */
+StreamableFixer Expression() :
+{
+    Fixable s;
+    StreamableFixer fixer;
+}
+{
+  {
+    fixer = new StreamableFixer();
+  }
+  ( s=FixExpression()
+	{
+	  fixer.add(s);
+	}
+  )*
+   
+  <EOF>
+  {
+    return fixer;
+  }
+}
+
+Fixable FixExpression() :
+{
+    Token t,s;
+}
+{
+  t=<STRING> <LPAREN> s=<QUOTED_STRING> <RPAREN> 
+  { return Util.createFixer(t.image,s.image); }
+}
