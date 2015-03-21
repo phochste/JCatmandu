@@ -45,7 +45,7 @@ public class Demo {
         System.out.println("---------");
         
         string_importer
-               .take(2)
+               .take(12)
                .fix_doset(new librecat.org.catmandu.bind.Maybe<String>(),
                        new StreamableFixer<>()
                             .add("StringAppend","-ALPHA")

@@ -40,15 +40,18 @@ public class Maybe<T> extends Binder<T,Maybe<T>> {
     @Override
     public Maybe<T> bind(Maybe<T> xdata, Function<T, T> fixer) {
         if (xdata == null || value(xdata) == null) {
-            System.err.println("Ignored:" + fixer);
             return nothing();
         } 
   
         try {
             return just(fixer.apply(value(xdata)));
         } catch (Exception e) {
-            System.err.println("Caught: " + e + " :-)");
             return nothing();
         }
-    }    
+    }
+    
+    public String toString() {
+        if (t == null) return "nothing";
+        else return "just(" + t.toString() + ")";
+    }
 }

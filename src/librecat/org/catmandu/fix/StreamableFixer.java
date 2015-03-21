@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.function.Function;
 import librecat.org.catmandu.Binder;
 import librecat.org.catmandu.Fixable;
+import librecat.org.catmandu.Generator;
 import librecat.org.catmandu.Streamer;
+import librecat.org.catmandu.StreamerFactory;
 import librecat.org.catmandu.Util;
 
 /**
@@ -63,22 +65,7 @@ public class StreamableFixer<T> implements Fixable<Streamer<T>>  {
         });
     }
     
-    public <S>Streamer<T> fix_do(Binder<T,S> binder, Streamer<T> stream) {
-        return stream.map(new Function<T,T>() {
-            @Override
-            public T apply(T data) {
-                S xdata = binder.unit(data);
-                
-                for (Fixable<T> fixer : fixes) {
-                    xdata = binder.bind(xdata, (a) -> fixer.fix(a));
-                }
-                
-                return data;
-            }
-        });
-    }
-    
-    public <S>Streamer<T> fix_doset(Binder<T,S> binder, Streamer<T> stream) {
+    public <S> Streamer<T> fix_do(Binder<T,S> binder, Streamer<T> stream) {
         return stream.map(new Function<T,T>() {
             @Override
             public T apply(T data) {
@@ -89,6 +76,29 @@ public class StreamableFixer<T> implements Fixable<Streamer<T>>  {
                 }
                 
                 return binder.value(xdata);
+            }
+        });
+    }
+    
+    public <S> Streamer<S> fix_doset(Binder<T,S> binder, Streamer<T> stream) {
+        return new StreamerFactory<>(new Generator<S>() {
+            private final Generator<T> gen = stream.generator();
+            
+            @Override
+            public S next() {
+                T data  = gen.next();
+                
+                if (data == null) {
+                    return null;
+                }
+                
+                S xdata = binder.unit(data);
+                
+                for (Fixable<T> fixer : fixes) {
+                    xdata = binder.bind(xdata, (a) -> fixer.fix(a));
+                }
+                
+                return xdata;
             }
         });
     }

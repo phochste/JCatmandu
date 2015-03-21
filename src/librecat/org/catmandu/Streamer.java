@@ -123,7 +123,7 @@ public abstract class Streamer<T> implements Streamable<T> {
         return fixer.fix_do(binder, this);
     }
     
-    public <S> Streamer<T> fix_doset(Binder<T,S> binder, StreamableFixer<T> fixer) {
+    public <S> Streamer<S> fix_doset(Binder<T,S> binder, StreamableFixer<T> fixer) {
         return fixer.fix_doset(binder, this);
     }
 }
