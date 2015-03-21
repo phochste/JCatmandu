@@ -3,6 +3,7 @@ package librecat.org.catmandu.fix;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import librecat.org.catmandu.Binder;
 import librecat.org.catmandu.Fixable;
 import librecat.org.catmandu.Streamer;
 import librecat.org.catmandu.Util;
@@ -14,11 +15,10 @@ import librecat.org.catmandu.Util;
  * @param <T>
  */
 public class StreamableFixer<T> implements Fixable<Streamer<T>>  {
-    
-    public final List<Fixable<T>> fixes;
+    private final List<Fixable<T>> fixes;
     
     public StreamableFixer() {
-        this.fixes = new ArrayList<>();
+        this.fixes  = new ArrayList<>();
     }
     
     public StreamableFixer(String name, Object ... args) {
@@ -35,14 +35,20 @@ public class StreamableFixer<T> implements Fixable<Streamer<T>>  {
         this.fixes = fixes;
     }
   
-    public void add(String name, Object ... args) {
+    public StreamableFixer add(String name, Object ... args) {
         fixes.add((Fixable<T>) Util.createFixer(name, args));
+        return this;
     }
     
-    public void add(Fixable<T> fix) {
+    public StreamableFixer add(Fixable<T> fix) {
         fixes.add(fix);
+        return this;
     }
 
+    public List<Fixable<T>> list() {
+        return fixes;
+    } 
+    
     @Override
     public Streamer<T> fix(Streamer<T> stream) {
         return stream.map(new Function<T,T>() {
@@ -50,6 +56,20 @@ public class StreamableFixer<T> implements Fixable<Streamer<T>>  {
             public T apply(T data) {
                 for (Fixable<T> fixer : fixes) {
                     data = fixer.fix(data);
+                }
+                return data;
+            }
+            
+        });
+    }
+    
+    public <S>Streamer<T> fix_bind(Binder<T,S> binder, Streamer<T> stream) {
+        return stream.map(new Function<T,T>() {
+            @Override
+            public T apply(T data) {
+                for (Fixable<T> fixer : fixes) {
+                    S xdata = binder.unit(data);
+                    data = binder.bind(xdata, (a) -> fixer.fix(a));
                 }
                 return data;
             }

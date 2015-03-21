@@ -8,7 +8,7 @@ import librecat.org.catmandu.Binder;
  * @author hochsten
  * @param <T>
  */
-public class IdentityBinder<T> extends Binder<T,T> {
+public class Identity<T> extends Binder<T,T> {
 
     @Override
     public T unit(T data) {
@@ -17,6 +17,6 @@ public class IdentityBinder<T> extends Binder<T,T> {
 
     @Override
     public T bind(T xdata, Function<T, T> fixer) {
-        return fixer.apply(xdata);
+        return fixer.apply((T) xdata);
     }
 }

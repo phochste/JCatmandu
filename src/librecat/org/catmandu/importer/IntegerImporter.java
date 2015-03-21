@@ -11,9 +11,10 @@ import librecat.org.catmandu.Importer;
 public class IntegerImporter extends Importer {
     private int size = -1;
     
+    public IntegerImporter() {}
+    
     public IntegerImporter(int size) {
-        this.size = size;
-        
+        this.size = size;   
     }
     
     @Override
@@ -23,7 +24,7 @@ public class IntegerImporter extends Importer {
             
             @Override
             public Integer next() {
-                 if (size > 0 && start < size) {
+                 if (size == -1 ||  (size > 0 && start < size)) {
                      start += 1;
                      return start;
                  }

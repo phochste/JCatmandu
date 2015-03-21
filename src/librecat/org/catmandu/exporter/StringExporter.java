@@ -10,6 +10,7 @@ public class StringExporter extends Exporter {
 
     @Override
     public void add(Object data) {
-        System.out.println(data);
+        if (data != null)
+             System.out.println(data);
     }
 }

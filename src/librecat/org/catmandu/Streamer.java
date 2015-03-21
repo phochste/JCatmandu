@@ -118,4 +118,8 @@ public abstract class Streamer<T> implements Streamable<T> {
     public Streamer<T> fix(StreamableFixer<T> fixer) {
         return fixer.fix(this);
     }
+        
+    public <S> Streamer<T> fix_bind(Binder<T,S> binder, StreamableFixer<T> fixer) {
+        return fixer.fix_bind(binder, this);
+    }
 }

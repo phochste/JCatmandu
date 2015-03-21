@@ -1,7 +1,11 @@
 /*
  *  Copyright (c) 2011 . Patrick Hochstenbach <Patrick.Hochstenbach@gmail.com>
  */
-package librecat.org.catmandu;
+package librecat.org.catmandu.cmd;
+
+import librecat.org.catmandu.Exporter;
+import librecat.org.catmandu.Importer;
+import librecat.org.catmandu.Util;
 
 /**
  *

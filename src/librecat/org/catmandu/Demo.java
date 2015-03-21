@@ -1,8 +1,8 @@
 package librecat.org.catmandu;
 
 import java.io.StringReader;
-import librecat.org.catmandu.bind.IdentityBinder;
 import librecat.org.catmandu.exporter.StringExporter;
+import librecat.org.catmandu.fix.Identity;
 import librecat.org.catmandu.fix.StreamableFixer;
 import librecat.org.catmandu.fix.StringAppend;
 import librecat.org.catmandu.importer.IntegerImporter;
@@ -39,7 +39,21 @@ public class Demo {
                 .fix(new StringAppend("-TEST"))
                 .fix(new StringAppend("-OK"))
                 .fix("StringAppend","-HAHA")
-                .export(new StringExporter());    
+                .export(new StringExporter());   
+        
+      
+        System.out.println("---------");
+        
+        string_importer
+               .take(2)
+               .fix_bind(new librecat.org.catmandu.bind.Maybe<String>(),
+                       new StreamableFixer<>()
+                            .add("StringAppend","-ALPHA")
+                            .add("StringAppend","-TANGO")
+                            .add("Error")
+                            .add("StringAppend","-BRAVO")
+               )
+               .export(new StringExporter());        
     }
     
     public static void test_json_importer() {
@@ -50,7 +64,8 @@ public class Demo {
     
     public static void test_binder() {
          /* Binder */
-        IdentityBinder<String> b_i = new IdentityBinder<>();
+        librecat.org.catmandu.bind.Identity<String> 
+                b_i = new librecat.org.catmandu.bind.Identity<>();
         
         String test    = "PATRICK";
         
@@ -109,8 +124,8 @@ public class Demo {
     public static void main(String[] args) throws Exception {
         //test_integer_stream();
         //test_string_stream();
-        //test_fixes();
-        test_json_importer();
+        test_fixes();
+        //test_json_importer();
         //test_binder();
         //test_parser("StringAppend(\"-OK\") StringAppend(\"REST\") ");
     }

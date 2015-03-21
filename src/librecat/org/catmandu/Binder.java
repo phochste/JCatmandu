@@ -8,10 +8,10 @@ import java.util.function.Function;
  * @param <T>
  * @param <S>
  */
-public abstract class Binder<T,S> implements Bindable<T, S> {
+public abstract class Binder<T,S> implements Bindable<T,S> {
 
     @Override
-    public abstract S unit(T data);
+    public abstract  S unit(T data);
 
     @Override
     public abstract T bind(S xdata, Function<T, T> fixer);
