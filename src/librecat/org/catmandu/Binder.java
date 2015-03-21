@@ -11,8 +11,11 @@ import java.util.function.Function;
 public abstract class Binder<T,S> implements Bindable<T,S> {
 
     @Override
-    public abstract  S unit(T data);
+    public abstract S unit(T data);
 
     @Override
-    public abstract T bind(S xdata, Function<T, T> fixer);
+    public abstract S bind(S xdata, Function<T, T> fixer);
+    
+    @Override
+    public abstract T value(S xdata);
 }

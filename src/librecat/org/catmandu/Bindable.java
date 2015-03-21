@@ -10,5 +10,6 @@ import java.util.function.Function;
  */
 public interface Bindable<T,S> {
     public S unit(T data);
-    public T bind(S xdata, Function<T,T> fixer);
+    public S bind(S xdata, Function<T,T> fixer);
+    public T value(S xdata);
 }

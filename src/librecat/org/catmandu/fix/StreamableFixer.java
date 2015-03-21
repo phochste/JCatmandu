@@ -67,13 +67,14 @@ public class StreamableFixer<T> implements Fixable<Streamer<T>>  {
         return stream.map(new Function<T,T>() {
             @Override
             public T apply(T data) {
+                S xdata = binder.unit(data);
+                
                 for (Fixable<T> fixer : fixes) {
-                    S xdata = binder.unit(data);
-                    data = binder.bind(xdata, (a) -> fixer.fix(a));
+                    xdata = binder.bind(xdata, (a) -> fixer.fix(a));
                 }
-                return data;
+                
+                return binder.value(xdata);
             }
-            
         });
     }
 }

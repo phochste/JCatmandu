@@ -8,7 +8,7 @@ import librecat.org.catmandu.Binder;
  * @author hochsten
  * @param <T>
  */
-public class Maybe<T> extends Binder<T,Maybe<?>> {
+public class Maybe<T> extends Binder<T,Maybe<T>> {
     private final T t;
     
     public Maybe() {
@@ -19,8 +19,8 @@ public class Maybe<T> extends Binder<T,Maybe<?>> {
         this.t = t;
     }
     
-    public T value() {
-        return t;
+    public T value(Maybe<T> xdata) {
+        return xdata.t;
     }
     
     public static <T> Maybe<T> just(T t) {
@@ -32,23 +32,23 @@ public class Maybe<T> extends Binder<T,Maybe<?>> {
     }
 
     @Override
-    public Maybe<?> unit(T data) {
+    public Maybe<T> unit(T data) {
         if (data == null) return nothing();
         else return just(data);
     }
 
     @Override
-    public T bind(Maybe<?> xdata, Function<T, T> fixer) {
-        if (xdata == null || xdata.value() == nothing().value()) {
+    public Maybe<T> bind(Maybe<T> xdata, Function<T, T> fixer) {
+        if (xdata == null || value(xdata) == null) {
             System.err.println("Ignored:" + fixer);
-            return null;
+            return nothing();
         } 
   
         try {
-            return fixer.apply((T) xdata.value());
+            return just(fixer.apply(value(xdata)));
         } catch (Exception e) {
             System.err.println("Caught: " + e + " :-)");
-            return (T) nothing().value();
+            return nothing();
         }
     }    
 }
