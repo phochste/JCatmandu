@@ -46,11 +46,10 @@ public class Demo {
         
         string_importer
                .take(2)
-               .fix_bind(new librecat.org.catmandu.bind.Maybe<String>(),
+               .fix_doset(new librecat.org.catmandu.bind.Maybe<String>(),
                        new StreamableFixer<>()
                             .add("StringAppend","-ALPHA")
                             .add("StringAppend","-TANGO")
-                            .add("Error")
                             .add("StringAppend","-BRAVO")
                )
                .export(new StringExporter());        

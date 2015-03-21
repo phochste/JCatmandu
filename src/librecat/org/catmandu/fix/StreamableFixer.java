@@ -63,7 +63,22 @@ public class StreamableFixer<T> implements Fixable<Streamer<T>>  {
         });
     }
     
-    public <S>Streamer<T> fix_bind(Binder<T,S> binder, Streamer<T> stream) {
+    public <S>Streamer<T> fix_do(Binder<T,S> binder, Streamer<T> stream) {
+        return stream.map(new Function<T,T>() {
+            @Override
+            public T apply(T data) {
+                S xdata = binder.unit(data);
+                
+                for (Fixable<T> fixer : fixes) {
+                    xdata = binder.bind(xdata, (a) -> fixer.fix(a));
+                }
+                
+                return data;
+            }
+        });
+    }
+    
+    public <S>Streamer<T> fix_doset(Binder<T,S> binder, Streamer<T> stream) {
         return stream.map(new Function<T,T>() {
             @Override
             public T apply(T data) {

@@ -119,7 +119,11 @@ public abstract class Streamer<T> implements Streamable<T> {
         return fixer.fix(this);
     }
         
-    public <S> Streamer<T> fix_bind(Binder<T,S> binder, StreamableFixer<T> fixer) {
-        return fixer.fix_bind(binder, this);
+    public <S> Streamer<T> fix_do(Binder<T,S> binder, StreamableFixer<T> fixer) {
+        return fixer.fix_do(binder, this);
+    }
+    
+    public <S> Streamer<T> fix_doset(Binder<T,S> binder, StreamableFixer<T> fixer) {
+        return fixer.fix_doset(binder, this);
     }
 }
