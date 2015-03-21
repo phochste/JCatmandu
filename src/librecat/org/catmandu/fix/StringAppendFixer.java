@@ -6,10 +6,10 @@ import librecat.org.catmandu.Fixable;
  *
  * @author hochsten
  */
-public class StringAppend implements Fixable<String> {
+public class StringAppendFixer implements Fixable<String> {
     private final String str;
     
-    public StringAppend(String str) {
+    public StringAppendFixer(String str) {
         this.str = str;
     }
     

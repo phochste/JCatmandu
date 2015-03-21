@@ -3,15 +3,14 @@ package librecat.org.catmandu.fix;
 import librecat.org.catmandu.Fixable;
 
 /**
- * Fix that does nothing
- * 
+ * Fix that throws an error
  * @author hochsten
  * @param <T>
  */
-public class Identity<T> implements Fixable<T> {
+public class ErrorFixer<T> implements Fixable<T> {
 
     @Override
     public T fix(T data) {
-        return data;
-    }    
+        throw new UnsupportedOperationException("Error! :-o"); 
+    }
 }

@@ -35,21 +35,37 @@ TOKEN : /* RESERVED WORDS AND LITERALS */
 | < ELSE: "else">
 | < IF: "if" > 
 | < UNLESS: "unless">
-| < LPAREN: "(">
-| < RPAREN: ")">
 }
 
 TOKEN : 
 {
-  < STRING : (["A"-"Z" , "a"-"z" , "_" , "0"-"9"])+ > 
-| <QUOTED: 
-    "\"" 
-    (
-         "\\" ~[]     //any escaped character
-    |                 //or
-        ~["\"","\\"]  //any character except quote or backslash
-    )* 
-    "\"" > 
+  < NAME: ["a" - "z"] <NAME_REST> >
+| < #NAME_REST: ([ "_" , "0" - "9" , "a" - "z" , "A" - "Z"])* >
+
+| < S_ARG: <QQ_STRING> | <Q_STRING> >
+| < L_ARG: <INT> | <BARE_STRING> >
+
+| < #INT: <DIGITS> | "-" <DIGITS> >
+| < #DIGITS: (["0" - "9"])* >
+
+| < #QQ_STRING: "\"" <QQ_CHARS> "\"" >
+| < #QQ_CHARS: (<QQ_CHAR>)* >
+| < #QQ_CHAR:    
+         ~["\""]                   // non-quote     = self
+       | "\\" ["r", "n", "\""]     // escaped char  = CR | LF | quote
+       | "\"" "\""                 // doubled-quote = quote 
+  >
+
+| < #Q_STRING: "'" <Q_CHARS> "'" >
+| < #Q_CHARS: (<Q_CHAR>)* >
+| < #Q_CHAR:    
+         ~["'"]                   // non-quote     = self
+       | "\\" ["r", "n", "'"]     // escaped char  = CR | LF | quote
+       | "'" "'"                  // doubled-quote = quote 
+  >
+
+| < BARE_STRING: [ "a" - "z", "A" - "Z" ] ([ "_" , "0" - "9" , "a" - "z" , "A" - "Z"])* >
+
 }
 
 /** Root production. */
@@ -76,13 +92,26 @@ List Expression() :
 
 Fixable FixExpression() :
 {
-    Token t,s;
+    Token t;
+    String s;
 }
 {
-  t=<STRING> <LPAREN> s=<QUOTED> <RPAREN> 
-  { return Util.createFixer(
-          t.image,
-          s.image.substring(1,s.image.length() - 1 )
-    ); 
-  }
+  t=<NAME> "(" s=StringArgument() ")" 
+  { return Util.createFixer(t.image,s); }
+}
+
+String StringArgument() :
+{
+    Token s;
+}
+{
+    s=<S_ARG>
+    {
+        return s.image.substring(1,s.image.length() - 1 );
+    }
+  | 
+    s=<L_ARG>
+    {
+        return "" + s.image;
+    }
 }

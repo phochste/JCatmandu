@@ -25,13 +25,31 @@ public interface ParserConstants {
   /** RegularExpression Id. */
   int UNLESS = 12;
   /** RegularExpression Id. */
-  int LPAREN = 13;
+  int NAME = 13;
   /** RegularExpression Id. */
-  int RPAREN = 14;
+  int NAME_REST = 14;
   /** RegularExpression Id. */
-  int STRING = 15;
+  int S_ARG = 15;
   /** RegularExpression Id. */
-  int QUOTED = 16;
+  int L_ARG = 16;
+  /** RegularExpression Id. */
+  int INT = 17;
+  /** RegularExpression Id. */
+  int DIGITS = 18;
+  /** RegularExpression Id. */
+  int QQ_STRING = 19;
+  /** RegularExpression Id. */
+  int QQ_CHARS = 20;
+  /** RegularExpression Id. */
+  int QQ_CHAR = 21;
+  /** RegularExpression Id. */
+  int Q_STRING = 22;
+  /** RegularExpression Id. */
+  int Q_CHARS = 23;
+  /** RegularExpression Id. */
+  int Q_CHAR = 24;
+  /** RegularExpression Id. */
+  int BARE_STRING = 25;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -51,10 +69,21 @@ public interface ParserConstants {
     "\"else\"",
     "\"if\"",
     "\"unless\"",
+    "<NAME>",
+    "<NAME_REST>",
+    "<S_ARG>",
+    "<L_ARG>",
+    "<INT>",
+    "<DIGITS>",
+    "<QQ_STRING>",
+    "<QQ_CHARS>",
+    "<QQ_CHAR>",
+    "<Q_STRING>",
+    "<Q_CHARS>",
+    "<Q_CHAR>",
+    "<BARE_STRING>",
     "\"(\"",
     "\")\"",
-    "<STRING>",
-    "<QUOTED>",
   };
 
 }

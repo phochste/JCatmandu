@@ -2,5 +2,5 @@
 
 JAVAHOME=`/usr/libexec/java_home -v 1.8`
 exec ${JAVAHOME}/bin/java \
-    -cp ../dist/Catmandu.jar:../lib/org.json-20120521.jar \
+    -cp ../dist/JCatmandu.jar:../lib/org.json-20120521.jar \
     librecat.org.catmandu.cmd.Main "$@"

@@ -8,8 +8,12 @@ import java.lang.reflect.InvocationTargetException;
  * @author hochsten
  */
 public final class Util {
+    public static String upcase(String s) {
+        return Character.toUpperCase(s.charAt(0)) + s.substring(1); 
+    }
+    
     public static final <T> Importer<T> createImporter(String name, Object ... args) {
-        String classname = "librecat.org.catmandu.importer." + name;
+        String classname = "librecat.org.catmandu.importer." + upcase(name) + "Importer";
  
         Importer importer;
         
@@ -43,7 +47,7 @@ public final class Util {
     }
         
     public static final <T> Fixable<T> createFixer(String name, Object ... args) {
-        String classname = "librecat.org.catmandu.fix." + name;
+        String classname = "librecat.org.catmandu.fix." + upcase(name) + "Fixer";
  
         Fixable fixer;
         
@@ -77,7 +81,7 @@ public final class Util {
     }
     
     public static final <T> Exporter<T> createExporter(String name, Object ... args) {
-        String classname = "librecat.org.catmandu.exporter." + name;
+        String classname = "librecat.org.catmandu.exporter." + upcase(name) + "Exporter";
  
         Exporter exporter;
         
@@ -111,7 +115,7 @@ public final class Util {
     }
     
     public static final <T,S> Binder<T,S> createBinder(String name, Object ... args) {
-        String classname = "librecat.org.catmandu.bind." + name;
+        String classname = "librecat.org.catmandu.bind." + upcase(name) + "Binder";
  
         Binder binder;
         

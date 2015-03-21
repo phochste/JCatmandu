@@ -8,7 +8,7 @@ import librecat.org.catmandu.Binder;
  * @author hochsten
  * @param <T>
  */
-public class Identity<T> extends Binder<T,T> {    
+public class IdentityBinder<T> extends Binder<T,T> {    
     @Override
     public T unit(T data) {
         return data;

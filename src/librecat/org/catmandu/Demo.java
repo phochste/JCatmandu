@@ -4,7 +4,7 @@ import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
 import librecat.org.catmandu.exporter.StringExporter;
-import librecat.org.catmandu.fix.StringAppend;
+import librecat.org.catmandu.fix.StringAppendFixer;
 import librecat.org.catmandu.importer.IntegerImporter;
 import librecat.org.catmandu.importer.JSONImporter;
 import librecat.org.catmandu.importer.StringImporter;
@@ -36,8 +36,8 @@ public class Demo {
         /* Apply fixes to a stream */
         string_importer
                 .take(100)
-                .fix(new StringAppend("-TEST"))
-                .fix(new StringAppend("-OK"))
+                .fix(new StringAppendFixer("-TEST"))
+                .fix(new StringAppendFixer("-OK"))
                 .fix("StringAppend","-HAHA")
                 .export(new StringExporter());   
         
@@ -46,12 +46,11 @@ public class Demo {
         
         string_importer
                .take(12)
-               .doset(new librecat.org.catmandu.bind.Maybe<String>(),
-                       Arrays.asList(
-                        new librecat.org.catmandu.fix.Error<>(),
-                        new StringAppend("-ALPHA") ,
-                        new StringAppend("-BRAVO") ,
-                        new StringAppend("-CHARLIE") 
+               .doset(new librecat.org.catmandu.bind.MaybeBinder<String>(),
+                       Arrays.asList(new librecat.org.catmandu.fix.ErrorFixer<>(),
+                        new StringAppendFixer("-ALPHA") ,
+                        new StringAppendFixer("-BRAVO") ,
+                        new StringAppendFixer("-CHARLIE") 
                        )
                )
                .export(new StringExporter());        
@@ -65,8 +64,8 @@ public class Demo {
     
     public static void test_binder() {
          /* Binder */
-        librecat.org.catmandu.bind.Identity<String> 
-                b_i = new librecat.org.catmandu.bind.Identity<>();
+        Binder<String,String>
+                b_i = Util.createBinder("Identity");
         
         String test    = "PATRICK";
         
@@ -131,6 +130,11 @@ public class Demo {
         //test_fixes();
         //test_json_importer();
         //test_binder();
-        test_parser("StringAppend(\"-OK\") StringAppend(\"--FOX\")");
+        test_parser(
+                "stringAppend( \"-OK\"  )\n" + 
+                "stringAppend(   '--FOX')\n" +
+                "stringAppend(17)\n" +
+                "stringAppend(OKSTATS)\n"
+        );
     }
 }

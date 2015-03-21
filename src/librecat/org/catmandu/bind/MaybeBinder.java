@@ -8,37 +8,37 @@ import librecat.org.catmandu.Binder;
  * @author hochsten
  * @param <T>
  */
-public class Maybe<T> extends Binder<T,Maybe<T>> {
+public class MaybeBinder<T> extends Binder<T,MaybeBinder<T>> {
     private final T t;
     
-    public Maybe() {
+    public MaybeBinder() {
         this.t = null;
     }
     
-    private Maybe(T t) {
+    private MaybeBinder(T t) {
         this.t = t;
     }
     
-    public T value(Maybe<T> xdata) {
+    public T value(MaybeBinder<T> xdata) {
         return xdata.t;
     }
     
-    public static <T> Maybe<T> just(T t) {
-        return new Maybe<>(t);
+    public static <T> MaybeBinder<T> just(T t) {
+        return new MaybeBinder<>(t);
     }
     
-    public static <T> Maybe<T> nothing() {
-        return new Maybe<>(null);
+    public static <T> MaybeBinder<T> nothing() {
+        return new MaybeBinder<>(null);
     }
 
     @Override
-    public Maybe<T> unit(T data) {
+    public MaybeBinder<T> unit(T data) {
         if (data == null) return nothing();
         else return just(data);
     }
 
     @Override
-    public Maybe<T> bind(Maybe<T> xdata, Function<T, T> fixer) {
+    public MaybeBinder<T> bind(MaybeBinder<T> xdata, Function<T, T> fixer) {
         if (xdata == null || value(xdata) == null) {
             return nothing();
         } 
