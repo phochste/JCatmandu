@@ -31,7 +31,7 @@ public interface ParserConstants {
   /** RegularExpression Id. */
   int STRING = 15;
   /** RegularExpression Id. */
-  int QUOTED_STRING = 16;
+  int QUOTED = 16;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -54,7 +54,7 @@ public interface ParserConstants {
     "\"(\"",
     "\")\"",
     "<STRING>",
-    "<QUOTED_STRING>",
+    "<QUOTED>",
   };
 
 }

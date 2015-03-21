@@ -1,9 +1,9 @@
 package librecat.org.catmandu;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import librecat.org.catmandu.exporter.NullExporter;
-import librecat.org.catmandu.fix.StreamableFixer;
 
 /**
  * Class to stream over T. Only for demonstration purposes. 
@@ -13,7 +13,10 @@ import librecat.org.catmandu.fix.StreamableFixer;
  * @param <T>
  */
 public abstract class Streamer<T> implements Streamable<T> {
-       
+    public static <T> Streamer<T> of(T ... args) {
+        return new StreamerFactory<>(args);
+    }
+    
     public int export() {
         return (new NullExporter()).add_many(this);
     }
@@ -108,22 +111,46 @@ public abstract class Streamer<T> implements Streamable<T> {
     }
     
     public Streamer<T> fix(String name, Object ... args) {
-        return (new StreamableFixer<T>(name,args)).fix(this);
+        Fixable<T> fixer = Util.createFixer(name, args);
+        return map((a) -> fixer.fix(a));
     }
     
     public Streamer<T> fix(Fixable<T> fixer) {
-        return (new StreamableFixer<>(fixer)).fix(this);
-    }
-    
-    public Streamer<T> fix(StreamableFixer<T> fixer) {
-        return fixer.fix(this);
+        return map((a) -> fixer.fix(a));
     }
         
-    public <S> Streamer<T> fix_do(Binder<T,S> binder, StreamableFixer<T> fixer) {
-        return fixer.fix_do(binder, this);
+    public <S> Streamer<T> dorun(Binder<T,S> binder, List<Fixable<T>> fixes) {
+        return map((T data) -> {
+            S xdata = binder.unit(data);
+            
+            for (Fixable<T> fixer : fixes) {
+                xdata = binder.bind(xdata, (a) -> fixer.fix(a));
+            }
+            
+            return binder.value(xdata);
+        });
     }
     
-    public <S> Streamer<S> fix_doset(Binder<T,S> binder, StreamableFixer<T> fixer) {
-        return fixer.fix_doset(binder, this);
+    public <S> Streamer<S> doset(Binder<T,S> binder, List<Fixable<T>> fixes) {
+        return new StreamerFactory<>(new Generator<S>() {
+            private final Generator<T> gen = generator();
+            
+            @Override
+            public S next() {
+                T data  = gen.next();
+                
+                if (data == null) {
+                    return null;
+                }
+                
+                S xdata = binder.unit(data);
+                
+                for (Fixable<T> fixer : fixes) {
+                    xdata = binder.bind(xdata, (a) -> fixer.fix(a));
+                }
+                
+                return xdata;
+            }
+        });
     }
 }

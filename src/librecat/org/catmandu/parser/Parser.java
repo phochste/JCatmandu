@@ -4,18 +4,19 @@
 
     import librecat.org.catmandu.Fixable;
     import librecat.org.catmandu.Util;
-    import librecat.org.catmandu.fix.StreamableFixer;
+    import java.util.List;
+    import java.util.ArrayList;
 
     public class Parser implements ParserConstants {
 
-        public static StreamableFixer parse(java.io.Reader reader) throws ParseException, TokenMgrError {
+        public static List parse(java.io.Reader reader) throws ParseException, TokenMgrError {
             return new Parser(reader).Expression();
         }
 
 /** Root production. */
-  static final public StreamableFixer Expression() throws ParseException {Fixable s;
-    StreamableFixer fixer;
-fixer = new StreamableFixer();
+  static final public List Expression() throws ParseException {Fixable s;
+    List fixes;
+fixes = new ArrayList();
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -28,19 +29,22 @@ fixer = new StreamableFixer();
         break label_1;
       }
       s = FixExpression();
-fixer.add(s);
+fixes.add(s);
     }
     jj_consume_token(0);
-{if ("" != null) return fixer;}
+{if ("" != null) return fixes;}
     throw new Error("Missing return statement in function");
   }
 
   static final public Fixable FixExpression() throws ParseException {Token t,s;
     t = jj_consume_token(STRING);
     jj_consume_token(LPAREN);
-    s = jj_consume_token(QUOTED_STRING);
+    s = jj_consume_token(QUOTED);
     jj_consume_token(RPAREN);
-{if ("" != null) return Util.createFixer(t.image,s.image);}
+{if ("" != null) return Util.createFixer(
+          t.image,
+          s.image.substring(1,s.image.length() - 1 )
+    );}
     throw new Error("Missing return statement in function");
   }
 

@@ -109,4 +109,38 @@ public final class Util {
         
         return exporter;
     }
+    
+    public static final <T,S> Binder<T,S> createBinder(String name, Object ... args) {
+        String classname = "librecat.org.catmandu.bind." + name;
+ 
+        Binder binder;
+        
+        try {
+            Class  cl = Class.forName(classname);
+            Constructor[] cons = cl.getConstructors();
+            Constructor cont = null;
+            
+            boolean found = false;
+            for (Constructor con : cons) {
+                if (con.getParameterCount() == args.length) {
+                    cont = con;
+                    found = true;
+                }
+            }
+            
+            if (! found) {
+                throw new RuntimeException("Can't find constructor for " + classname);
+            }
+            
+            binder = (Binder<T,S>) cont.newInstance(args);
+        }
+        catch (ClassNotFoundException | 
+               IllegalAccessException | 
+               InstantiationException | 
+               InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        
+        return binder;
+    }
 }

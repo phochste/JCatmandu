@@ -3,11 +3,12 @@ PARSER_BEGIN(Parser)
 
     import librecat.org.catmandu.Fixable;
     import librecat.org.catmandu.Util;
-    import librecat.org.catmandu.fix.StreamableFixer;
+    import java.util.List;
+    import java.util.ArrayList;
 
     public class Parser {
         
-        public static StreamableFixer parse(java.io.Reader reader) throws ParseException, TokenMgrError {
+        public static List parse(java.io.Reader reader) throws ParseException, TokenMgrError {
             return new Parser(reader).Expression();
         }
     }
@@ -41,28 +42,35 @@ TOKEN : /* RESERVED WORDS AND LITERALS */
 TOKEN : 
 {
   < STRING : (["A"-"Z" , "a"-"z" , "_" , "0"-"9"])+ > 
-| < QUOTED_STRING: "\"" (~["\""])+ "\"" >
+| <QUOTED: 
+    "\"" 
+    (
+         "\\" ~[]     //any escaped character
+    |                 //or
+        ~["\"","\\"]  //any character except quote or backslash
+    )* 
+    "\"" > 
 }
 
 /** Root production. */
-StreamableFixer Expression() :
+List Expression() :
 {
     Fixable s;
-    StreamableFixer fixer;
+    List fixes;
 }
 {
   {
-    fixer = new StreamableFixer();
+    fixes = new ArrayList();
   }
   ( s=FixExpression()
 	{
-	  fixer.add(s);
+	  fixes.add(s);
 	}
   )*
    
   <EOF>
   {
-    return fixer;
+    return fixes;
   }
 }
 
@@ -71,6 +79,10 @@ Fixable FixExpression() :
     Token t,s;
 }
 {
-  t=<STRING> <LPAREN> s=<QUOTED_STRING> <RPAREN> 
-  { return Util.createFixer(t.image,s.image); }
+  t=<STRING> <LPAREN> s=<QUOTED> <RPAREN> 
+  { return Util.createFixer(
+          t.image,
+          s.image.substring(1,s.image.length() - 1 )
+    ); 
+  }
 }

@@ -1,9 +1,9 @@
 package librecat.org.catmandu;
 
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
 import librecat.org.catmandu.exporter.StringExporter;
-import librecat.org.catmandu.fix.Identity;
-import librecat.org.catmandu.fix.StreamableFixer;
 import librecat.org.catmandu.fix.StringAppend;
 import librecat.org.catmandu.importer.IntegerImporter;
 import librecat.org.catmandu.importer.JSONImporter;
@@ -46,11 +46,13 @@ public class Demo {
         
         string_importer
                .take(12)
-               .fix_doset(new librecat.org.catmandu.bind.Maybe<String>(),
-                       new StreamableFixer<>()
-                            .add("StringAppend","-ALPHA")
-                            .add("StringAppend","-TANGO")
-                            .add("StringAppend","-BRAVO")
+               .doset(new librecat.org.catmandu.bind.Maybe<String>(),
+                       Arrays.asList(
+                        new librecat.org.catmandu.fix.Error<>(),
+                        new StringAppend("-ALPHA") ,
+                        new StringAppend("-BRAVO") ,
+                        new StringAppend("-CHARLIE") 
+                       )
                )
                .export(new StringExporter());        
     }
@@ -106,15 +108,18 @@ public class Demo {
     
     public static void test_parser(String test) {
         try {
-            StreamableFixer<String> fixer = Parser.parse(new StringReader(test));
+            List fixes = Parser.parse(new StringReader(test));
             
             Importer<String> string_importer = new StringImporter();
             
             string_importer
-                .take(10000000)
-                .fix(fixer)
+                .take(10)
                 .benchmark()
-                .export(); 
+                .dorun(
+                        Util.createBinder("Identity")
+                        , fixes
+                )
+                .export(new StringExporter()); 
         } catch (ParseException | Error e) {
             System.err.println(test + "==> " + e);
         }
@@ -123,9 +128,9 @@ public class Demo {
     public static void main(String[] args) throws Exception {
         //test_integer_stream();
         //test_string_stream();
-        test_fixes();
+        //test_fixes();
         //test_json_importer();
         //test_binder();
-        //test_parser("StringAppend(\"-OK\") StringAppend(\"REST\") ");
+        test_parser("StringAppend(\"-OK\") StringAppend(\"--FOX\")");
     }
 }

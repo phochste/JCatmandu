@@ -15,13 +15,18 @@ public final class StreamerFactory<T> extends Streamer<T> {
         this.generator = generator;
     }
     
-    public StreamerFactory(final T[] array) {
+    public StreamerFactory(final T[] args) {
         this.generator = new Generator<T>() {
             private int index = 0;
             
             @Override
             public T next() {
-                return array[index++];
+                if (index < args.length) {
+                    return args[index++];
+                }
+                else {
+                    return null;
+                }
             }
         };
     }
@@ -36,7 +41,7 @@ public final class StreamerFactory<T> extends Streamer<T> {
             }
         };
     }
-        
+    
     @Override
     public Generator<T> generator() {
         return this.generator;
