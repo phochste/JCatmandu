@@ -27,28 +27,16 @@ SPECIAL_TOKEN : /* COMMENTS */
   <SINGLE_LINE_COMMENT: "#" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
 }
 
-TOKEN : /* RESERVED WORDS AND LITERALS */
-{
-  < DO: "do" >
-| < DOSET: "doset" >
-| < END: "end">
-| < ELSE: "else">
-| < IF: "if" > 
-| < UNLESS: "unless">
-}
-
 TOKEN : 
 {
+  
   < NAME: ["a" - "z"] <NAME_REST> >
 | < #NAME_REST: ([ "_" , "0" - "9" , "a" - "z" , "A" - "Z"])* >
 
-| < S_ARG: <QQ_STRING> | <Q_STRING> >
-| < L_ARG: <INT> | <BARE_STRING> >
+| < INT: <DIGITS> | "-" <DIGITS> >
+| < #DIGITS: ["0" - "9"] (["0" - "9"])* >
 
-| < #INT: <DIGITS> | "-" <DIGITS> >
-| < #DIGITS: (["0" - "9"])* >
-
-| < #QQ_STRING: "\"" <QQ_CHARS> "\"" >
+| < QQ_STRING: "\"" <QQ_CHARS> "\"" >
 | < #QQ_CHARS: (<QQ_CHAR>)* >
 | < #QQ_CHAR:    
          ~["\""]                   // non-quote     = self
@@ -56,7 +44,7 @@ TOKEN :
        | "\"" "\""                 // doubled-quote = quote 
   >
 
-| < #Q_STRING: "'" <Q_CHARS> "'" >
+| < Q_STRING: "'" <Q_CHARS> "'" >
 | < #Q_CHARS: (<Q_CHAR>)* >
 | < #Q_CHAR:    
          ~["'"]                   // non-quote     = self
@@ -65,19 +53,15 @@ TOKEN :
   >
 
 | < BARE_STRING: [ "a" - "z", "A" - "Z" ] ([ "_" , "0" - "9" , "a" - "z" , "A" - "Z"])* >
-
 }
 
 /** Root production. */
 List Expression() :
 {
     Fixable s;
-    List fixes;
+    List fixes = new ArrayList();
 }
 {
-  {
-    fixes = new ArrayList();
-  }
   ( s=FixExpression()
 	{
 	  fixes.add(s);
@@ -93,25 +77,30 @@ List Expression() :
 Fixable FixExpression() :
 {
     Token t;
+    java.util.Vector args = new java.util.Vector();
     String s;
 }
 {
-  t=<NAME> "(" s=StringArgument() ")" 
-  { return Util.createFixer(t.image,s); }
+  t=<NAME> "(" 
+    (
+      s=FixArgument() { args.addElement(s); }
+        ( ","
+            s=FixArgument() { args.addElement(s); } 
+        )*  
+    )*
+  ")"
+    { 
+        return Util.createFixer(t.image,args.toArray()); 
+    }
 }
 
-String StringArgument() :
+String FixArgument() :
 {
     Token s;
 }
 {
-    s=<S_ARG>
-    {
-        return s.image.substring(1,s.image.length() - 1 );
-    }
-  | 
-    s=<L_ARG>
-    {
-        return "" + s.image;
-    }
+     s=<QQ_STRING>   { return s.image.substring(1,s.image.length() - 1 ); }
+  |  s=<Q_STRING>    { return s.image.substring(1,s.image.length() - 1 ); }
+  |  s=<INT>         { return "" + s.image; }
+  |  s=<BARE_STRING> { return "" + s.image; }
 }

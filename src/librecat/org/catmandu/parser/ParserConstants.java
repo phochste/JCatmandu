@@ -13,43 +13,27 @@ public interface ParserConstants {
   /** RegularExpression Id. */
   int SINGLE_LINE_COMMENT = 6;
   /** RegularExpression Id. */
-  int DO = 7;
+  int NAME = 7;
   /** RegularExpression Id. */
-  int DOSET = 8;
+  int NAME_REST = 8;
   /** RegularExpression Id. */
-  int END = 9;
+  int INT = 9;
   /** RegularExpression Id. */
-  int ELSE = 10;
+  int DIGITS = 10;
   /** RegularExpression Id. */
-  int IF = 11;
+  int QQ_STRING = 11;
   /** RegularExpression Id. */
-  int UNLESS = 12;
+  int QQ_CHARS = 12;
   /** RegularExpression Id. */
-  int NAME = 13;
+  int QQ_CHAR = 13;
   /** RegularExpression Id. */
-  int NAME_REST = 14;
+  int Q_STRING = 14;
   /** RegularExpression Id. */
-  int S_ARG = 15;
+  int Q_CHARS = 15;
   /** RegularExpression Id. */
-  int L_ARG = 16;
+  int Q_CHAR = 16;
   /** RegularExpression Id. */
-  int INT = 17;
-  /** RegularExpression Id. */
-  int DIGITS = 18;
-  /** RegularExpression Id. */
-  int QQ_STRING = 19;
-  /** RegularExpression Id. */
-  int QQ_CHARS = 20;
-  /** RegularExpression Id. */
-  int QQ_CHAR = 21;
-  /** RegularExpression Id. */
-  int Q_STRING = 22;
-  /** RegularExpression Id. */
-  int Q_CHARS = 23;
-  /** RegularExpression Id. */
-  int Q_CHAR = 24;
-  /** RegularExpression Id. */
-  int BARE_STRING = 25;
+  int BARE_STRING = 17;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -63,16 +47,8 @@ public interface ParserConstants {
     "\"\\r\"",
     "\"\\f\"",
     "<SINGLE_LINE_COMMENT>",
-    "\"do\"",
-    "\"doset\"",
-    "\"end\"",
-    "\"else\"",
-    "\"if\"",
-    "\"unless\"",
     "<NAME>",
     "<NAME_REST>",
-    "<S_ARG>",
-    "<L_ARG>",
     "<INT>",
     "<DIGITS>",
     "<QQ_STRING>",
@@ -83,6 +59,7 @@ public interface ParserConstants {
     "<Q_CHAR>",
     "<BARE_STRING>",
     "\"(\"",
+    "\",\"",
     "\")\"",
   };
 

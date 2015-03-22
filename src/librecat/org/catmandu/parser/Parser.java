@@ -15,8 +15,7 @@
 
 /** Root production. */
   static final public List Expression() throws ParseException {Fixable s;
-    List fixes;
-fixes = new ArrayList();
+    List fixes = new ArrayList();
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -37,29 +36,71 @@ fixes.add(s);
   }
 
   static final public Fixable FixExpression() throws ParseException {Token t;
+    java.util.Vector args = new java.util.Vector();
     String s;
     t = jj_consume_token(NAME);
-    jj_consume_token(26);
-    s = StringArgument();
-    jj_consume_token(27);
-{if ("" != null) return Util.createFixer(t.image,s);}
+    jj_consume_token(18);
+    label_2:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case INT:
+      case QQ_STRING:
+      case Q_STRING:
+      case BARE_STRING:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[1] = jj_gen;
+        break label_2;
+      }
+      s = FixArgument();
+args.addElement(s);
+      label_3:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case 19:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[2] = jj_gen;
+          break label_3;
+        }
+        jj_consume_token(19);
+        s = FixArgument();
+args.addElement(s);
+      }
+    }
+    jj_consume_token(20);
+{if ("" != null) return Util.createFixer(t.image,args.toArray());}
     throw new Error("Missing return statement in function");
   }
 
-  static final public String StringArgument() throws ParseException {Token s;
+  static final public String FixArgument() throws ParseException {Token s;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case S_ARG:{
-      s = jj_consume_token(S_ARG);
+    case QQ_STRING:{
+      s = jj_consume_token(QQ_STRING);
 {if ("" != null) return s.image.substring(1,s.image.length() - 1 );}
       break;
       }
-    case L_ARG:{
-      s = jj_consume_token(L_ARG);
+    case Q_STRING:{
+      s = jj_consume_token(Q_STRING);
+{if ("" != null) return s.image.substring(1,s.image.length() - 1 );}
+      break;
+      }
+    case INT:{
+      s = jj_consume_token(INT);
+{if ("" != null) return "" + s.image;}
+      break;
+      }
+    case BARE_STRING:{
+      s = jj_consume_token(BARE_STRING);
 {if ("" != null) return "" + s.image;}
       break;
       }
     default:
-      jj_la1[1] = jj_gen;
+      jj_la1[3] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -76,13 +117,13 @@ fixes.add(s);
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[2];
+  static final private int[] jj_la1 = new int[4];
   static private int[] jj_la1_0;
   static {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x2000,0x18000,};
+      jj_la1_0 = new int[] {0x80,0x24a00,0x80000,0x24a00,};
    }
 
   /** Constructor with InputStream. */
@@ -103,7 +144,7 @@ fixes.add(s);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -117,7 +158,7 @@ fixes.add(s);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -134,7 +175,7 @@ fixes.add(s);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -144,7 +185,7 @@ fixes.add(s);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -160,7 +201,7 @@ fixes.add(s);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -169,7 +210,7 @@ fixes.add(s);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 4; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -220,12 +261,12 @@ fixes.add(s);
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[28];
+    boolean[] la1tokens = new boolean[21];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 4; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -234,7 +275,7 @@ fixes.add(s);
         }
       }
     }
-    for (int i = 0; i < 28; i++) {
+    for (int i = 0; i < 21; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
