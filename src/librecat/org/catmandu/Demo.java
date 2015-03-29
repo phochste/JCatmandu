@@ -135,8 +135,8 @@ public class Demo {
                 "stringAppend(   '--FOX')\n" +
                 "identity()\n" + 
                 "stringAppend(17)\n" +
-                "stringAppend(OKSTATS)\n" + 
-                "stringReplace('date',DATE)\n"
+                "stringAppend('OKSTATS')\n" + 
+                "stringReplace('date','\"WHAT?!\"')\n"
         );
     }
 }

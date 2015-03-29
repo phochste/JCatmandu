@@ -39,14 +39,13 @@ fixes.add(s);
     java.util.Vector args = new java.util.Vector();
     String s;
     t = jj_consume_token(NAME);
-    jj_consume_token(18);
+    jj_consume_token(17);
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case INT:
       case QQ_STRING:
-      case Q_STRING:
-      case BARE_STRING:{
+      case Q_STRING:{
         ;
         break;
         }
@@ -59,7 +58,7 @@ args.addElement(s);
       label_3:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-        case 19:{
+        case 18:{
           ;
           break;
           }
@@ -67,12 +66,12 @@ args.addElement(s);
           jj_la1[2] = jj_gen;
           break label_3;
         }
-        jj_consume_token(19);
+        jj_consume_token(18);
         s = FixArgument();
 args.addElement(s);
       }
     }
-    jj_consume_token(20);
+    jj_consume_token(19);
 {if ("" != null) return Util.createFixer(t.image,args.toArray());}
     throw new Error("Missing return statement in function");
   }
@@ -91,11 +90,6 @@ args.addElement(s);
       }
     case INT:{
       s = jj_consume_token(INT);
-{if ("" != null) return "" + s.image;}
-      break;
-      }
-    case BARE_STRING:{
-      s = jj_consume_token(BARE_STRING);
 {if ("" != null) return "" + s.image;}
       break;
       }
@@ -123,7 +117,7 @@ args.addElement(s);
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x80,0x24a00,0x80000,0x24a00,};
+      jj_la1_0 = new int[] {0x80,0x4a00,0x40000,0x4a00,};
    }
 
   /** Constructor with InputStream. */
@@ -261,7 +255,7 @@ args.addElement(s);
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[21];
+    boolean[] la1tokens = new boolean[20];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -275,7 +269,7 @@ args.addElement(s);
         }
       }
     }
-    for (int i = 0; i < 21; i++) {
+    for (int i = 0; i < 20; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

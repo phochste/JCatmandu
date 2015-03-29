@@ -7,7 +7,6 @@ PARSER_BEGIN(Parser)
     import java.util.ArrayList;
 
     public class Parser {
-        
         public static List parse(java.io.Reader reader) throws ParseException, TokenMgrError {
             return new Parser(reader).Expression();
         }
@@ -51,8 +50,6 @@ TOKEN :
        | "\\" ["r", "n", "'"]     // escaped char  = CR | LF | quote
        | "'" "'"                  // doubled-quote = quote 
   >
-
-| < BARE_STRING: [ "a" - "z", "A" - "Z" ] ([ "_" , "0" - "9" , "a" - "z" , "A" - "Z"])* >
 }
 
 /** Root production. */
@@ -102,5 +99,4 @@ String FixArgument() :
      s=<QQ_STRING>   { return s.image.substring(1,s.image.length() - 1 ); }
   |  s=<Q_STRING>    { return s.image.substring(1,s.image.length() - 1 ); }
   |  s=<INT>         { return "" + s.image; }
-  |  s=<BARE_STRING> { return "" + s.image; }
 }

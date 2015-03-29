@@ -32,8 +32,6 @@ public interface ParserConstants {
   int Q_CHARS = 15;
   /** RegularExpression Id. */
   int Q_CHAR = 16;
-  /** RegularExpression Id. */
-  int BARE_STRING = 17;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -57,7 +55,6 @@ public interface ParserConstants {
     "<Q_STRING>",
     "<Q_CHARS>",
     "<Q_CHAR>",
-    "<BARE_STRING>",
     "\"(\"",
     "\",\"",
     "\")\"",
