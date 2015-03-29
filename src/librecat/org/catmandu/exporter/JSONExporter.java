@@ -28,6 +28,6 @@ public class JSONExporter extends Exporter<JSONObject> {
         }
         catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        } 
     }    
 }
